@@ -1,0 +1,32 @@
+/home/student/catkin_ws/allenamento/allenamento_7/allenamento_7.bag<launch>
+  <arg name="bag" default="/home/student/Downloads/allenamento_7.bag" />
+  <arg name="rate" default="1.0" />
+  <arg name="loop_arg" default="" />
+
+  <node pkg="sss_package"
+        type="waterfall_creator_node.py"
+        name="waterfall_creator_node"
+        output="screen" />
+
+  <node pkg="sss_package"
+        type="object_classification_node.py"
+        name="object_classification_node"
+        output="screen" />
+
+  <node pkg="sss_package"
+        type="geolocalization_node.py"
+        name="geolocalization_node"
+        output="screen">
+    <param name="sonar_range_m" value="25.0" />
+    <param name="sensor_x_offset_m" value="0.063" />
+    <param name="sensor_y_offset_m" value="0.354" />
+    <param name="sensor_z_offset_m" value="0.096" />
+    <param name="geodetic_functions_path" value="/home/student/Downloads" />
+  </node>
+
+  <node pkg="rosbag"
+        type="play"
+        name="allenamento_7_bag"
+        args="--delay=2 --rate=$(arg rate) $(arg loop_arg) $(arg bag)"
+        output="screen" />
+</launch>

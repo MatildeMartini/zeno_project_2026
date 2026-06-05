@@ -1,0 +1,30 @@
+<launch>
+  <arg name="rate" default="1.0" />
+  <arg name="real_objects_csv" default="" />
+  <arg name="loop_arg" default="" />
+  <arg name="bag_prefix" default="$(env HOME)/zeno_lake_experiment_SSS" />
+
+  <node pkg="sss_package"
+        type="waterfall_creator_node.py"
+        name="waterfall_creator_node"
+        output="screen" />
+
+  <node pkg="sss_package"
+        type="object_classification_node.py"
+        name="object_classification_node"
+        output="screen" />
+
+  <node pkg="sss_package"
+        type="geolocalization_node.py"
+        name="geolocalization_node"
+        output="screen">
+    <param name="real_objects_csv" value="$(arg real_objects_csv)" />
+  </node>
+
+  <node pkg="sss_package"
+        type="realtime_visualizer_node.py"
+        name="realtime_visualizer_node"
+        output="screen" />
+
+
+</launch>

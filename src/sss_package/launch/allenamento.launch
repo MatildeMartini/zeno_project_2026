@@ -1,0 +1,58 @@
+<launch>
+  <arg name="bag" default="/home/student/Downloads/BAG_allenamento/allenamento_11.bag" />
+  <arg name="real_objects_csv" default="/home/student/Downloads/BAG_allenamento/posizioni_allenamento11.csv" />
+  <arg name="rate" default="1.0" />
+  <arg name="loop_arg" default="" />
+  <arg name="bag_prefix" default="$(env HOME)/zeno_lake_experiment_SSS" />
+
+  <node pkg="sss_package"
+        type="waterfall_creator_node.py"
+        name="waterfall_creator_node"
+        output="screen" />
+
+  <node pkg="sss_package"
+        type="object_classification_node.py"
+        name="object_classification_node"
+        output="screen" />
+
+  <node pkg="sss_package"
+        type="geolocalization_node.py"
+        name="geolocalization_node"
+        output="screen">
+    <param name="real_objects_csv" value="$(arg real_objects_csv)" />
+  </node>
+
+  <node pkg="sss_package"
+        type="realtime_visualizer_node.py"
+        name="realtime_visualizer_node"
+        output="screen" />
+
+  <node pkg="rosbag"
+        type="play"
+        name="allenamento_11_bag"
+        args="--delay=2 --rate=$(arg rate) $(arg loop_arg) $(arg bag)"
+        output="screen" />
+
+      <!--
+      Salvataggio bag per esperimento al lago in
+      /home/student/zeno_lake_experiment_SSS.bag
+      
+  
+  <node pkg="rosbag"
+        type="record"
+        name="record_lake_experiment"
+        output="screen"
+        args="-O $(arg bag_prefix)
+
+              /drivers/altitude_sim
+              /nav_status
+              /drivers/sss_sim
+              /phase1/SSS
+              /phase3/SSS
+
+              /waterfall_image_topic
+              /waterfall_realtime_topic
+              /classified_objects_topic
+              /list_topic" />
+      -->
+</launch>
